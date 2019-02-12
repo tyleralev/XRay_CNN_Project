@@ -4,7 +4,7 @@ from flask import Flask, request, jsonify, render_template
 from keras.preprocessing import image
 
 app = Flask(__name__)
-app.config['UPLOAD_FOLDER'] = 'uploads'
+app.config['UPLOAD_FOLDER'] = './Image_Test/test'
 
 
 def prepare_image(img):
