@@ -4,20 +4,7 @@ from flask import Flask, request, jsonify, render_template
 from keras.preprocessing import image
 
 app = Flask(__name__)
-app.config['UPLOAD_FOLDER'] = './Image_Test/test'
-
-
-def prepare_image(img):
-    # Convert the image to a numpy array
-    img = image.img_to_array(img)
-    # Scale from 0 to 255
-    img /= 255
-    # Invert the pixels
-    img = 1 - img
-    # Flatten the image to an array of pixels
-    image_array = img.flatten().reshape(-1, 28 * 28)
-    # Return the processed feature array
-    return image_array
+app.config['UPLOAD_FOLDER'] = './Image_Test/test/'
 
 
 @app.route('/', methods=['GET', 'POST'])
@@ -39,15 +26,7 @@ def upload_file():
             # Save the file to the uploads folder
             file.save(filepath)
 
-            # Load the saved image using Keras and resize it to the
-            # mnist format of 28x28 pixels
-            image_size = (28, 28)
-            im = image.load_img(filepath, target_size=image_size,
-                                grayscale=True)
 
-            # Convert the 2D image to an array of pixel values
-            image_array = prepare_image(im)
-            print(image_array)
 
             return "Data Pre-processing Complete!"
     return '''
