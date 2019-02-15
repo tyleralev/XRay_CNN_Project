@@ -41,15 +41,41 @@ def upload_file():
 
             # Load the saved image using Keras and resize it to the
             # mnist format of 28x28 pixels
-            image_size = (28, 28)
-            im = image.load_img(filepath, target_size=image_size,
-                                grayscale=True)
+            # image_size = (28, 28)
+            # im = image.load_img(filepath, target_size=image_size,
+            #                     grayscale=True)
+            #
+            # # Convert the 2D image to an array of pixel values
+            # image_array = prepare_image(im)
+            # print(image_array)
 
-            # Convert the 2D image to an array of pixel values
-            image_array = prepare_image(im)
-            print(image_array)
+            from keras.models import load_model
+            from keras.preprocessing import image
+            model2 = load_model('body_part_model.h5')
 
-            return "Data Pre-processing Complete!"
+            test_generator = datagen.flow_from_directory(
+                directory= './flask-app/Image_Test/',
+                target_size=(256,256),
+                color_mode='grayscale',
+                batch_size=1,
+                class_mode=None,
+                shuffle=False,
+                seed=42
+            )
+
+            test_generator.reset()
+            pred = model2.predict_generator(test_generator,steps=1,verbose=1)
+
+            predicted_class_indices=np.argmax(pred,axis=1)
+            predicted_class_indices
+
+            labels = (train_generator.class_indices)
+            labels = dict((v,k) for k,v in labels.items())
+            predictions = [labels[k] for k in predicted_class_indices]
+            return predictions
+
+            # return "Data Pre-processing Complete!"
+
     return '''
 <!DOCTYPE html>
 <html>
